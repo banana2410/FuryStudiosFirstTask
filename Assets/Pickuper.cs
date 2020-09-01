@@ -1,0 +1,93 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Pickuper : MonoBehaviour
+{
+    public List<Box> ActiveBoxesList;
+    public Box _targetBox;
+    public Vector3 _targetPos;
+    public float _speed;
+
+    private Transform _blueContainer => GameObject.FindGameObjectWithTag("BlueContainer").GetComponent<Transform>();
+    private Transform _redContainer => GameObject.FindGameObjectWithTag("RedContainer").GetComponent<Transform>();
+
+    private bool isCarryingBox;
+    private Rigidbody2D _rb => gameObject.GetComponent<Rigidbody2D>();
+
+
+
+    void Update()
+    {
+        if (doesNeedTarget())
+            setBoxTarget(getClosestBox());
+        if (canPickItUp())
+        {
+            _targetBox.transform.parent = this.gameObject.transform;
+            isCarryingBox = true;
+        }
+        if(isCarryingBox)
+        {
+            if (_targetBox.GetBoxColorType() == BoxColorType.Blue)
+                setTargetPos(_blueContainer.position);
+            else
+                setTargetPos(_redContainer.position);
+
+        }
+
+    }
+
+    private bool canPickItUp()
+    {
+        return (gameObject.transform.position.x - _targetBox.transform.position.x) < 0.5f;
+    }
+    private void FixedUpdate()
+    {
+        if (!doesNeedTarget())
+        {
+            if (_targetPos.x < gameObject.transform.position.x)
+            {
+                _rb.velocity = (Vector2.left * _speed);
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
+            else
+            {
+                _rb.velocity = Vector2.right * _speed;
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+
+        }
+    }
+    private void setBoxTarget(Box target)
+    {
+        _targetBox = target;
+        _targetPos = _targetBox.transform.position;
+    }
+    private bool doesNeedTarget()
+    {
+        return _targetBox == null;
+    }
+
+    private void setTargetPos(Vector3 targetPos)
+    {
+        _targetPos = targetPos;
+    }
+    private Box getClosestBox()
+    {
+        Box closestBox = null;
+        float closestBoxPosByX = Mathf.Infinity;
+        for (int i = 0; i < ActiveBoxesList.Count; i++)
+        {
+            float boxPos = ActiveBoxesList[i].transform.position.x;
+            float playerDistanceFromBox = Mathf.Abs(boxPos - gameObject.transform.position.x);
+            if (playerDistanceFromBox < closestBoxPosByX)
+            {
+                closestBoxPosByX = playerDistanceFromBox;
+                closestBox = ActiveBoxesList[i];
+            }
+        }
+        return closestBox;
+    }
+
+
+}
