@@ -14,8 +14,10 @@ public class Container : MonoBehaviour
             Debug.Log("AA");
             Pickuper pickuper = collision.gameObject.GetComponent<Pickuper>();//Could cache it if needed
             _boxesInContainer.Add(pickuper._targetBox);
-            pickuper._targetBox.gameObject.SetActive(false);
-            pickuper._targetBox = null;
+            pickuper.ActiveBoxesList.Remove(pickuper._targetBox);
+            Destroy(pickuper._targetBox.gameObject);
+           // pickuper._targetBox = null;
+            pickuper.isCarryingBox = false;
         }
     }
 }

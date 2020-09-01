@@ -11,8 +11,9 @@ public class Pickuper : MonoBehaviour
 
     private Transform _blueContainer => GameObject.FindGameObjectWithTag("BlueContainer").GetComponent<Transform>();
     private Transform _redContainer => GameObject.FindGameObjectWithTag("RedContainer").GetComponent<Transform>();
+    private Transform _carryPos => gameObject.GetComponentInChildren<Transform>();
 
-    private bool isCarryingBox;
+    public bool isCarryingBox;
     private Rigidbody2D _rb => gameObject.GetComponent<Rigidbody2D>();
 
 
@@ -24,6 +25,7 @@ public class Pickuper : MonoBehaviour
         if (canPickItUp())
         {
             _targetBox.transform.parent = this.gameObject.transform;
+            _targetBox.transform.position = _carryPos.position;
             isCarryingBox = true;
         }
         if(isCarryingBox)
@@ -39,7 +41,7 @@ public class Pickuper : MonoBehaviour
 
     private bool canPickItUp()
     {
-        return (gameObject.transform.position.x - _targetBox.transform.position.x) < 0.5f;
+        return (Mathf.Abs(gameObject.transform.position.x - _targetBox.transform.position.x)) < 0.1f;
     }
     private void FixedUpdate()
     {
