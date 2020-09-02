@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Pickuper : MonoBehaviour
 {
+    public GameObject GameOverScreen;
     public List<Box> ActiveBoxesList;
     public Box _targetBox;
     public Vector3 _targetPos;
@@ -17,18 +18,21 @@ public class Pickuper : MonoBehaviour
     private Rigidbody2D _rb => gameObject.GetComponent<Rigidbody2D>();
 
 
-
+    private void Start()
+    {
+        Time.timeScale = 1f;
+    }
     void Update()
     {
-        if (doesNeedTarget())
+        if (isThereBoxesAvailable() && doesNeedTarget())
             setBoxTarget(getClosestBox());
-        if (canPickItUp())
+        if (isThereBoxesAvailable() && canPickItUp())
         {
             _targetBox.transform.parent = this.gameObject.transform;
             _targetBox.transform.position = _carryPos.position;
             isCarryingBox = true;
         }
-        if(isCarryingBox)
+        if (isCarryingBox)
         {
             if (_targetBox.GetBoxColorType() == BoxColorType.Blue)
                 setTargetPos(_blueContainer.position);
@@ -36,12 +40,21 @@ public class Pickuper : MonoBehaviour
                 setTargetPos(_redContainer.position);
 
         }
+        if(!isThereBoxesAvailable())
+        {
+            GameOverScreen.SetActive(true);
+            Time.timeScale = 0f;
+        }
 
     }
 
     private bool canPickItUp()
     {
         return (Mathf.Abs(gameObject.transform.position.x - _targetBox.transform.position.x)) < 0.1f;
+    }
+    private bool isThereBoxesAvailable()
+    {
+        return ActiveBoxesList.Count > 0;
     }
     private void FixedUpdate()
     {
