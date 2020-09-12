@@ -6,7 +6,7 @@ public class Pickuper : MonoBehaviour
 {
     public GameObject GameOverScreen;
     public List<Box> ActiveBoxesList = new List<Box>();
-    public Box _targetBox { get { return _targetBox; } set { _targetBox = value; } }
+    public Box _targetBox = null;
     public Vector3 _targetPos;
     public float _speed;
 
