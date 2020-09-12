@@ -23,16 +23,11 @@ public class Box : MonoBehaviour
         initalizeBox();
         _pickuper.ActiveBoxesList.Add(this);
     }
-    private void Awake()
-    {
-
-    }
 
     public BoxColorType GetBoxColorType()
     {
         return _boxColorType;
     }
-
 
     public void SetBoxColorType(BoxColorType boxColorType)
     {

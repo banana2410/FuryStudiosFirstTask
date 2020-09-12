@@ -7,17 +7,11 @@ public class BoxSpawner : MonoBehaviour
     public List<float> BoxSpawnPointsByXAxis;
     public Box BoxPrefab;
 
-    // Start is called before the first frame update
     void Start()
     {
         spawnBoxes();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void spawnBoxes()
     {
         for (int i = 0; i < BoxSpawnPointsByXAxis.Count; i++)

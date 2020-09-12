@@ -5,8 +5,8 @@ using UnityEngine;
 public class Pickuper : MonoBehaviour
 {
     public GameObject GameOverScreen;
-    public List<Box> ActiveBoxesList;
-    public Box _targetBox;
+    public List<Box> ActiveBoxesList = new List<Box>();
+    public Box _targetBox { get { return _targetBox; } set { _targetBox = value; } }
     public Vector3 _targetPos;
     public float _speed;
 
@@ -40,7 +40,7 @@ public class Pickuper : MonoBehaviour
                 setTargetPos(_redContainer.position);
 
         }
-        if(!isThereBoxesAvailable())
+        if (!isThereBoxesAvailable())
         {
             GameOverScreen.SetActive(true);
             Time.timeScale = 0f;
